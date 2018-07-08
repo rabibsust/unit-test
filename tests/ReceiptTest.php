@@ -23,11 +23,11 @@ class ReceiptTest extends TestCase {
     }
 
     /**
-     * @dataProvider provideTotal
+     * @dataProvider provideSubTotal
      */
-    public function testTotal($items, $expected){
+    public function testSubTotal($items, $expected){
         $coupon = null;
-        $output =  $this->Receipt->total($items, $coupon);
+        $output =  $this->Receipt->subtotal($items, $coupon);
         $this->assertEquals(
             $expected,
             $output,
@@ -35,10 +35,18 @@ class ReceiptTest extends TestCase {
         );
     }
 
-    public function testCouponTotal(){
+    public function provideSubTotal(){
+        return [
+            [[1,2,5,8], 16],
+            [[-1,2,5,8], 14],
+            [[1,2,8], 11],
+        ];
+    }
+
+    public function testCouponSubTotal(){
         $input = [0,2,5,8];
         $coupon = 0.20;
-        $output =  $this->Receipt->total($input, $coupon);
+        $output =  $this->Receipt->subtotal($input, $coupon);
         $this->assertEquals(
             12,
             $output,
@@ -48,8 +56,8 @@ class ReceiptTest extends TestCase {
 
     public function testTax(){
         $inputAmount = 10.00;
-        $taxInput = 0.10;
-        $output = $this->Receipt->tax($inputAmount, $taxInput);
+        $this->Receipt->tax = 0.10;
+        $output = $this->Receipt->tax($inputAmount);
         $this->assertEquals(
           1.00,
           $output,
@@ -62,11 +70,11 @@ class ReceiptTest extends TestCase {
         $tax = 0.20;
         $coupon = null;
         $Receipt = $this->getMockBuilder('TDD\Receipt')
-            ->setMethods(['tax','total'])
+            ->setMethods(['tax','subtotal'])
             ->getMock();
 
         $Receipt->expects($this->once())
-            ->method('total')
+            ->method('subtotal')
             ->with($items, $coupon)
             ->will($this->returnValue(10.00));
 
@@ -79,19 +87,12 @@ class ReceiptTest extends TestCase {
         $this->assertEquals(11.00, $result);
     }
 
-    public function provideTotal(){
-        return [
-            [[1,2,5,8], 16],
-            [[-1,2,5,8], 14],
-            [[1,2,8], 11],
-        ];
-    }
 
-    public function testTotalException(){
+    public function testSubTotalException(){
         $input = [0,2,5,8];
         $coupon = 1.20;
         $this->expectException('BadMethodCallException');
-        $this->Receipt->total($input,$coupon);
+        $this->Receipt->subtotal($input,$coupon);
     }
 
     /**
