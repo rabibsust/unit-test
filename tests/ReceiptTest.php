@@ -62,38 +62,38 @@ class ReceiptTest extends TestCase {
         );
     }
 
-    public function testTax(){
-        $inputAmount = 10.00;
-        $this->Receipt->tax = 0.10;
-        $output = $this->Receipt->tax($inputAmount);
-        $this->assertEquals(
-          1.00,
-          $output,
-          "The tax amount is equal to 1"
-        );
-    }
+//    public function testTax(){
+//        $inputAmount = 10.00;
+//        $this->Receipt->tax = 0.10;
+//        $output = $this->Receipt->tax($inputAmount);
+//        $this->assertEquals(
+//          1.00,
+//          $output,
+//          "The tax amount is equal to 1"
+//        );
+//    }
 
     public function testPostTaxTotal(){
         $items = [1,2,5,8];
-        $tax = 0.20;
+        $this->Receipt->tax = 0.20;
         $coupon = null;
-        $Receipt = $this->getMockBuilder('TDD\Receipt')
-            ->setMethods(['tax','subtotal'])
-            ->setConstructorArgs([$this->Formatter])
-            ->getMock();
+//        $Receipt = $this->getMockBuilder('TDD\Receipt')
+//            ->setMethods(['tax','subtotal'])
+//            ->setConstructorArgs([$this->Formatter])
+//            ->getMock();
+//
+//        $Receipt->expects($this->once())
+//            ->method('subtotal')
+//            ->with($items, $coupon)
+//            ->will($this->returnValue(10.00));
+//
+//        $Receipt->expects($this->once())
+//            ->method('tax')
+//            ->with(10.00, $tax)
+//            ->will($this->returnValue(1.00));
 
-        $Receipt->expects($this->once())
-            ->method('subtotal')
-            ->with($items, $coupon)
-            ->will($this->returnValue(10.00));
-
-        $Receipt->expects($this->once())
-            ->method('tax')
-            ->with(10.00, $tax)
-            ->will($this->returnValue(1.00));
-
-        $result = $Receipt->postTaxTotal([1,2,5,8], 0.20, null);
-        $this->assertEquals(11.00, $result);
+        $result = $this->Receipt->postTaxTotal($items, null);
+        $this->assertEquals(19.20, $result);
     }
 
 

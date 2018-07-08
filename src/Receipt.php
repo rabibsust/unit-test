@@ -25,8 +25,8 @@ class Receipt {
         $result = $this->Formatter->currencyAmount($amount * $this->tax);
         return $result;
     }
-    public function postTaxTotal($items, $tax, $coupon){
+    public function postTaxTotal($items, $coupon){
         $subtotal = $this->subtotal($items,$coupon);
-        return $subtotal + $this->tax($subtotal,$tax);
+        return $subtotal + $this->tax($subtotal,$this->tax);
     }
 }
