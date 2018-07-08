@@ -34,6 +34,7 @@ class ReceiptTest extends TestCase {
             "When summing the total should equal {$expected}"
         );
     }
+
     public function testCouponTotal(){
         $input = [0,2,5,8];
         $coupon = 0.20;
@@ -55,6 +56,7 @@ class ReceiptTest extends TestCase {
           "The tax amount is equal to 1"
         );
     }
+
     public function testPostTaxTotal(){
         $items = [1,2,5,8];
         $tax = 0.20;
@@ -83,5 +85,12 @@ class ReceiptTest extends TestCase {
             [[-1,2,5,8], 14],
             [[1,2,8], 11],
         ];
+    }
+
+    public function testTotalException(){
+        $input = [0,2,5,8];
+        $coupon = 1.20;
+        $this->expectException('BadMethodCallException');
+        $this->Receipt->total($input,$coupon);
     }
 }

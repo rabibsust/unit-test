@@ -2,8 +2,14 @@
 
 namespace TDD;
 
+use \BadMethodCallException;
+
 class Receipt {
     public function total(array $items = [], $coupon){
+        if ($coupon > 1.00)
+        {
+            throw  new BadMethodCallException('Coupon must be in between 1.00');
+        }
         $sum = array_sum($items);
         if ($coupon != null){
             return $sum - ($sum*$coupon);
