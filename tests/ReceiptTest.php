@@ -12,12 +12,33 @@ use PHPUnit\Framework\TestCase;
 use TDD\Receipt;
 
 class ReceiptTest extends TestCase {
+    public function setUp()
+    {
+        $this->Receipt = new Receipt();
+    }
+
+    public function tearDown()
+    {
+        unset($this->Receipt);
+    }
+
     public function testTotal(){
-        $receipt = new Receipt();
+        $input = [0,2,5,8];
+        $output =  $this->Receipt->total($input);
         $this->assertEquals(
             15,
-            $receipt->total([0,2,5,8]),
+            $output,
             "When summing the total should equal 15"
+        );
+    }
+    public function testTax(){
+        $inputAmount = 10.00;
+        $taxInput = 0.10;
+        $output = $this->Receipt->tax($inputAmount, $taxInput);
+        $this->assertEquals(
+          1.00,
+          $output,
+          "The tax amount is equal to 1"
         );
     }
 }
