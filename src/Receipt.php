@@ -5,6 +5,11 @@ namespace TDD;
 use \BadMethodCallException;
 
 class Receipt {
+    public function __construct($formatter)
+    {
+        $this->Formatter = $formatter;
+    }
+
     public function subtotal(array $items = [], $coupon){
         if ($coupon > 1.00)
         {
@@ -17,14 +22,11 @@ class Receipt {
         return $sum;
     }
     public function tax($amount){
-        $result = $amount * $this->tax;
+        $result = $this->Formatter->currencyAmount($amount * $this->tax);
         return $result;
     }
     public function postTaxTotal($items, $tax, $coupon){
         $subtotal = $this->subtotal($items,$coupon);
         return $subtotal + $this->tax($subtotal,$tax);
-    }
-    public function currencyAmount($input){
-        return round($input,2);
     }
 }
